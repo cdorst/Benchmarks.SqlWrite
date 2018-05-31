@@ -1,0 +1,11 @@
+version: '3.4'
+services:
+  sqlserver:
+    image: microsoft/mssql-server-linux:latest
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: "DevelopmentP@ssw0rd"
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P 'DevelopmentP@ssw0rd' -Q 'select 1'
