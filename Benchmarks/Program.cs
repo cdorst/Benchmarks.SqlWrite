@@ -1,8 +1,8 @@
-﻿using BenchmarkDotNet.Running;
-using Benchmarks.Model;
+﻿using Benchmarks.Model;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using static BenchmarkDotNet.Running.BenchmarkRunner;
 
 namespace Benchmarks
 {
@@ -11,7 +11,8 @@ namespace Benchmarks
         public static async Task Main(string[] args)
         {
             await PrepareDatabase();
-            BenchmarkRunner.Run<Tests>();
+            Run<Tests>();
+            Run<TestsAsBytes>();
         }
 
         private static async Task PrepareDatabase()
@@ -47,6 +48,28 @@ BEGIN
 
     IF @Id IS NULL SET @Id = CAST(SCOPE_IDENTITY() as [int]);
     SELECT @Id;
+END");
+                await database.ExecuteSqlCommandAsync(@"CREATE PROCEDURE [dbo].[SaveE_Bytes]
+    @EntityBId smallint,
+    @EntityCId bigint
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @Id [int];
+
+    MERGE INTO [dbo].[EntityA] AS [target]
+    USING (VALUES (@EntityBId, @EntityCId))
+        AS [source] (EntityBId, EntityCId)
+        ON [target].[EntityBId] = [source].[EntityBId]
+        AND [target].[EntityCId] = [source].[EntityCId]
+    WHEN NOT MATCHED BY TARGET THEN
+        INSERT (EntityBId, EntityCId)
+        VALUES (EntityBId, EntityCId)
+    WHEN MATCHED THEN
+        UPDATE SET @Id = [target].[Id];
+
+    IF @Id IS NULL SET @Id = CAST(SCOPE_IDENTITY() as [int]);
+    SELECT CONVERT(BINARY(4), @Id);
 END");
                 Console.WriteLine("Adding EntityB & EntityC data");
                 byte iterations = 10;
