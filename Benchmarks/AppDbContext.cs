@@ -8,6 +8,9 @@ namespace Benchmarks
         public DbSet<EntityA> EntityA { get; set; }
         public DbSet<EntityB> EntityB { get; set; }
         public DbSet<EntityC> EntityC { get; set; }
+        public DbSet<MemoryOptimizedEntityA> MemoryOptimizedEntityA { get; set; }
+        public DbSet<MemoryOptimizedEntityB> MemoryOptimizedEntityB { get; set; }
+        public DbSet<MemoryOptimizedEntityC> MemoryOptimizedEntityC { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseSqlServer(Constants.ConnectionString);
@@ -21,6 +24,18 @@ namespace Benchmarks
                 nameof(Benchmarks.Model.EntityB.MyProperty));
             modelBuilder.Entity<EntityC>().HasAlternateKey(
                 nameof(Benchmarks.Model.EntityC.MyProperty));
+
+            modelBuilder.Entity<MemoryOptimizedEntityA>()
+                .ForSqlServerIsMemoryOptimized()
+                .HasAlternateKey(
+                    nameof(Benchmarks.Model.MemoryOptimizedEntityA.EntityBId),
+                    nameof(Benchmarks.Model.MemoryOptimizedEntityA.EntityCId));
+            modelBuilder.Entity<MemoryOptimizedEntityB>()
+                .ForSqlServerIsMemoryOptimized()
+                .HasAlternateKey(nameof(Benchmarks.Model.MemoryOptimizedEntityB.MyProperty));
+            modelBuilder.Entity<MemoryOptimizedEntityC>()
+                .ForSqlServerIsMemoryOptimized()
+                .HasAlternateKey(nameof(Benchmarks.Model.MemoryOptimizedEntityC.MyProperty));
         }
     }
 }
