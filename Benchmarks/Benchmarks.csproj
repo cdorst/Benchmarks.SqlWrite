@@ -13,4 +13,22 @@
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Sql\Is_NC_AsInt.sql" />
+    <None Remove="Sql\Is_NC_Bytes.sql" />
+    <None Remove="Sql\NotNC_AsInt.sql" />
+    <None Remove="Sql\NotNC_Bytes.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Sql\Is_NC_AsInt.sql" />
+    <EmbeddedResource Include="Sql\Is_NC_Bytes.sql" />
+    <EmbeddedResource Include="Sql\NotNC_AsInt.sql" />
+    <EmbeddedResource Include="Sql\NotNC_Bytes.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TabularDataStreamProtocol\TabularDataStreamProtocol.csproj" />
+  </ItemGroup>
+
 </Project>
