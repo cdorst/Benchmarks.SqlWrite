@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Threading.Tasks;
+using static Benchmarks.Sql.ResourceConstants;
 
 namespace Benchmarks
 {
@@ -53,50 +54,19 @@ namespace Benchmarks
 
         private static async Task CreateStoredProcedures(DatabaseFacade database)
         {
-            await database.ExecuteSqlCommandAsync(@"CREATE PROCEDURE [dbo].[SaveEntityA]
-    @EntityBId smallint,
-    @EntityCId bigint
-AS
-BEGIN
-    SET NOCOUNT ON;
-    DECLARE @Id [int];
+            await CreateNonNativelyCompiledProcedures(database);
+            await CreateNativelyCompiledProcedures(database);
+        }
 
-    MERGE INTO [dbo].[EntityA] AS [target]
-    USING (VALUES (@EntityBId, @EntityCId))
-        AS [source] (EntityBId, EntityCId)
-        ON [target].[EntityBId] = [source].[EntityBId]
-        AND [target].[EntityCId] = [source].[EntityCId]
-    WHEN NOT MATCHED BY TARGET THEN
-        INSERT (EntityBId, EntityCId)
-        VALUES (EntityBId, EntityCId)
-    WHEN MATCHED THEN
-        UPDATE SET @Id = [target].[Id];
-
-    IF @Id IS NULL SET @Id = CAST(SCOPE_IDENTITY() as [int]);
-    SELECT @Id;
-END");
-            await database.ExecuteSqlCommandAsync(@"CREATE PROCEDURE [dbo].[SaveE_Bytes]
-    @EntityBId smallint,
-    @EntityCId bigint
-AS
-BEGIN
-    SET NOCOUNT ON;
-    DECLARE @Id [int];
-
-    MERGE INTO [dbo].[EntityA] AS [target]
-    USING (VALUES (@EntityBId, @EntityCId))
-        AS [source] (EntityBId, EntityCId)
-        ON [target].[EntityBId] = [source].[EntityBId]
-        AND [target].[EntityCId] = [source].[EntityCId]
-    WHEN NOT MATCHED BY TARGET THEN
-        INSERT (EntityBId, EntityCId)
-        VALUES (EntityBId, EntityCId)
-    WHEN MATCHED THEN
-        UPDATE SET @Id = [target].[Id];
-
-    IF @Id IS NULL SELECT CONVERT(BINARY(4), SCOPE_IDENTITY());
-    ELSE SELECT CONVERT(BINARY(4), @Id);
-END");
+        private static async Task CreateNativelyCompiledProcedures(DatabaseFacade database)
+        {
+            await database.ExecuteSqlCommandAsync(GetNativeCompiled_AsInt_SqlText());
+            await database.ExecuteSqlCommandAsync(GetNativeCompiled_Bytes_SqlText());
+        }
+        private static async Task CreateNonNativelyCompiledProcedures(DatabaseFacade database)
+        {
+            await database.ExecuteSqlCommandAsync(GetNotNativeCompiled_AsInt_SqlText());
+            await database.ExecuteSqlCommandAsync(GetNotNativeCompiled_Bytes_SqlText());
         }
     }
 }
