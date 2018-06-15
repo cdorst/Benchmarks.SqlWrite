@@ -5,10 +5,10 @@ namespace Benchmarks.Sql
 {
     internal static class ResourceConstants
     {
-        private static readonly string Is_NC_AsInt = "Benchmarks.Sql.Is_NC_AsInt";
-        private static readonly string Is_NC_Bytes = "Benchmarks.Sql.Is_NC_Bytes";
-        private static readonly string NotNC_AsInt = "Benchmarks.Sql.NotNC_AsInt";
-        private static readonly string NotNC_Bytes = "Benchmarks.Sql.NotNC_Bytes";
+        private static readonly string Is_NC_AsInt = "Benchmarks.Sql.Is_NC_AsInt.sql";
+        private static readonly string Is_NC_Bytes = "Benchmarks.Sql.Is_NC_Bytes.sql";
+        private static readonly string NotNC_AsInt = "Benchmarks.Sql.NotNC_AsInt.sql";
+        private static readonly string NotNC_Bytes = "Benchmarks.Sql.NotNC_Bytes.sql";
 
         private static readonly Assembly Assembly = Assembly.GetExecutingAssembly();
 
