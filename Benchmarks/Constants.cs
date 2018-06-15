@@ -4,10 +4,10 @@ namespace Benchmarks
 {
     public static class Constants
     {
-        public const string BytesCommand = "[dbo].[SaveE_Bytes]";
-        public const string Command = "[dbo].[SaveEntityA]";
-        public const string ExecCommand = "EXEC [dbo].[SaveEntityA] ";
-        public const string ExecBytesCommand = "EXEC [dbo].[SaveE_Bytes] ";
+        public const string BytesCommand = "[dbo].[NotNC_Bytes]";
+        public const string Command = "[dbo].[NotNC_AsInt]";
+        public const string ExecBytesCommand = "EXEC [dbo].[NotNC_Bytes] ";
+        public const string ExecCommand = "EXEC [dbo].[NotNC_AsInt] ";
         public static readonly EntityA Entity = new EntityA { EntityBId = 5, EntityCId = 5 };
 
         public const string DatabaseUserName = "SA";
