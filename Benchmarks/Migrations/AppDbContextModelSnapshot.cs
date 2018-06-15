@@ -85,7 +85,12 @@ namespace Benchmarks.Migrations
                     b.HasAlternateKey("EntityBId", "EntityCId")
                         .HasAnnotation("SqlServer:Clustered", false);
 
+                    b.HasIndex("EntityBId")
+                        .IsUnique()
+                        .HasAnnotation("SqlServer:Clustered", false);
+
                     b.HasIndex("EntityCId")
+                        .IsUnique()
                         .HasAnnotation("SqlServer:Clustered", false);
 
                     b.ToTable("MemoryOptimizedEntityA");
@@ -149,14 +154,14 @@ namespace Benchmarks.Migrations
             modelBuilder.Entity("Benchmarks.Model.MemoryOptimizedEntityA", b =>
                 {
                     b.HasOne("Benchmarks.Model.MemoryOptimizedEntityB", "EntityB")
-                        .WithMany()
-                        .HasForeignKey("EntityBId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithOne()
+                        .HasForeignKey("Benchmarks.Model.MemoryOptimizedEntityA", "EntityBId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Benchmarks.Model.MemoryOptimizedEntityC", "EntityC")
-                        .WithMany()
-                        .HasForeignKey("EntityCId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithOne()
+                        .HasForeignKey("Benchmarks.Model.MemoryOptimizedEntityA", "EntityCId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

@@ -119,13 +119,13 @@ namespace Benchmarks.Migrations
                         column: x => x.EntityBId,
                         principalTable: "MemoryOptimizedEntityB",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MemoryOptimizedEntityA_MemoryOptimizedEntityC_EntityCId",
                         column: x => x.EntityCId,
                         principalTable: "MemoryOptimizedEntityC",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("SqlServer:MemoryOptimized", true);
 
@@ -135,9 +135,17 @@ namespace Benchmarks.Migrations
                 column: "EntityCId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MemoryOptimizedEntityA_EntityBId",
+                table: "MemoryOptimizedEntityA",
+                column: "EntityBId",
+                unique: true)
+                .Annotation("SqlServer:Clustered", false);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MemoryOptimizedEntityA_EntityCId",
                 table: "MemoryOptimizedEntityA",
-                column: "EntityCId")
+                column: "EntityCId",
+                unique: true)
                 .Annotation("SqlServer:Clustered", false);
         }
 
