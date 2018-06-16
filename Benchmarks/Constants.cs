@@ -8,6 +8,8 @@ namespace Benchmarks
         public const string Command = "[dbo].[NotNC_AsInt]";
         public const string ExecBytesCommand = "EXEC [dbo].[NotNC_Bytes] ";
         public const string ExecCommand = "EXEC [dbo].[NotNC_AsInt] ";
+        public const string NativeExecBytesCommand = "EXEC [dbo].[Is_NC_Bytes] ";
+        public const string NativeExecCommand = "EXEC [dbo].[Is_NC_AsInt] ";
         public static readonly EntityA Entity = new EntityA { EntityBId = 5, EntityCId = 5 };
 
         public const string DatabaseUserName = "SA";
