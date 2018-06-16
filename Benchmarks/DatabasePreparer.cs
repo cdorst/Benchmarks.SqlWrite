@@ -1,14 +1,18 @@
 ﻿using Benchmarks.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using System;
 using System.Threading.Tasks;
+using static Benchmarks.Constants;
 using static Benchmarks.Sql.ResourceConstants;
+using static System.Console;
+using static System.String;
 
 namespace Benchmarks
 {
     internal static class DatabasePreparer
     {
+        private const byte Iterations = 10;
+
         public static async Task PrepareDatabase()
         {
             await CreateSchema();
@@ -17,21 +21,36 @@ namespace Benchmarks
 
         private static async Task CreateData()
         {
+            WriteLine($"Adding {nameof(EntityB)} & {nameof(EntityC)} data");
             using (var db = new AppDbContext())
             {
-                Console.WriteLine("Adding EntityB & EntityC data");
-                byte iterations = 10;
-                for (byte i = 0; i < iterations; i++)
+                for (byte i = 0; i < Iterations; i++)
                 {
                     var @string = i.ToString();
                     db.EntityB.Add(new EntityB { MyProperty = @string });
                     db.EntityC.Add(new EntityC { MyProperty = @string });
                 }
                 await db.SaveChangesAsync();
-                Console.WriteLine("Adding EntityA data");
-                for (byte i = 1; i <= iterations; i++)
-                    for (byte j = 1; j <= iterations; j++)
+                WriteLine($"Adding {nameof(EntityA)} data");
+                for (byte i = 1; i <= Iterations; i++)
+                    for (byte j = 1; j <= Iterations; j++)
                         db.EntityA.Add(new EntityA { EntityBId = i, EntityCId = j });
+                await db.SaveChangesAsync();
+            }
+            WriteLine($"Adding {nameof(MemoryOptimizedEntityB)} & {nameof(MemoryOptimizedEntityC)} data");
+            using (var db = new AppDbContext())
+            {
+                for (byte i = 0; i < Iterations; i++)
+                {
+                    var @string = i.ToString();
+                    db.MemoryOptimizedEntityB.Add(new MemoryOptimizedEntityB { MyProperty = @string });
+                    db.MemoryOptimizedEntityC.Add(new MemoryOptimizedEntityC { MyProperty = @string });
+                }
+                await db.SaveChangesAsync();
+                WriteLine($"Adding {nameof(MemoryOptimizedEntityA)} data");
+                for (byte i = 1; i <= Iterations; i++)
+                    for (byte j = 1; j <= Iterations; j++)
+                        db.MemoryOptimizedEntityA.Add(new MemoryOptimizedEntityA { EntityBId = i, EntityCId = j });
                 await db.SaveChangesAsync();
             }
         }
@@ -41,13 +60,13 @@ namespace Benchmarks
             using (var db = new AppDbContext())
             {
                 var database = db.Database;
-                Console.WriteLine("Dropping db");
+                WriteLine("Dropping db");
                 await database.EnsureDeletedAsync();
-                Console.WriteLine("Creating db");
+                WriteLine("Creating db");
                 await database.MigrateAsync();
-                Console.WriteLine("Set default db for login");
-                await database.ExecuteSqlCommandAsync(string.Concat("ALTER LOGIN [", Constants.DatabaseUserName, "] WITH DEFAULT_DATABASE = [", Constants.DatabaseDbName, "]"));
-                Console.WriteLine("Creating stored procedure");
+                WriteLine("Set default db for login");
+                await database.ExecuteSqlCommandAsync(Concat("ALTER LOGIN [", DatabaseUserName, "] WITH DEFAULT_DATABASE = [", DatabaseDbName, "]"));
+                WriteLine("Creating stored procedure");
                 await CreateStoredProcedures(database);
             }
         }
@@ -63,6 +82,7 @@ namespace Benchmarks
             await database.ExecuteSqlCommandAsync(GetNativeCompiled_AsInt_SqlText());
             await database.ExecuteSqlCommandAsync(GetNativeCompiled_Bytes_SqlText());
         }
+
         private static async Task CreateNonNativelyCompiledProcedures(DatabaseFacade database)
         {
             await database.ExecuteSqlCommandAsync(GetNotNativeCompiled_AsInt_SqlText());
