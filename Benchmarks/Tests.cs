@@ -43,7 +43,7 @@ namespace Benchmarks
             using (var connection = new SqlConnection(Constants.ConnectionString))
             {
                 await connection.OpenAsync();
-                return await connection.ExecuteScalarAsync<int>(GetTextCommand(in Constants.Entity));
+                return await connection.ExecuteScalarAsync<int>(IntTextCommand(in Constants.Entity));
             }
         }
 
@@ -53,7 +53,7 @@ namespace Benchmarks
             using (var connection = new SqlConnection(Constants.ConnectionString))
             {
                 await connection.OpenAsync();
-                return await connection.ExecuteScalarAsync<byte[]>(GetAsBytesTextCommand(in Constants.Entity));
+                return await connection.ExecuteScalarAsync<byte[]>(AsBytesTextCommand(in Constants.Entity));
             }
         }
 
@@ -109,7 +109,7 @@ namespace Benchmarks
         public async Task<int> AdoSqlCommand_Text()
         {
             using (var connection = new SqlConnection(Constants.ConnectionString))
-            using (var command = new SqlCommand(GetTextCommand(in Constants.Entity), connection))
+            using (var command = new SqlCommand(IntTextCommand(in Constants.Entity), connection))
             {
                 await connection.OpenAsync();
                 return (int)(await command.ExecuteScalarAsync());
@@ -120,7 +120,7 @@ namespace Benchmarks
         public async Task<byte[]> AdoSqlCommand_Text_AsBytes()
         {
             using (var connection = new SqlConnection(Constants.ConnectionString))
-            using (var command = new SqlCommand(GetAsBytesTextCommand(in Constants.Entity), connection))
+            using (var command = new SqlCommand(AsBytesTextCommand(in Constants.Entity), connection))
             {
                 await connection.OpenAsync();
                 return (await command.ExecuteScalarAsync()) as byte[];
@@ -155,10 +155,16 @@ namespace Benchmarks
 
         */
 
-        private static string GetAsBytesTextCommand(in EntityA entity)
+        private static string AsBytesTextCommand(in EntityA entity)
             => string.Concat(Constants.ExecBytesCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
 
-        private static string GetTextCommand(in EntityA entity)
+        private static string IntTextCommand(in EntityA entity)
             => string.Concat(Constants.ExecCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
+
+        private static string NativeAsBytesTextCommand(in MemoryOptimizedEntityA entity)
+            => string.Concat(Constants.NativeExecBytesCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
+
+        private static string NativeIntTextCommand(in MemoryOptimizedEntityA entity)
+            => string.Concat(Constants.NativeExecCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
     }
 }
