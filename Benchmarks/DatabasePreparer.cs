@@ -21,7 +21,7 @@ namespace Benchmarks
 
         private static async Task CreateData()
         {
-            WriteLine($"Adding {nameof(EntityB)} & {nameof(EntityC)} data");
+            WriteLine($"Adding entity B & C data");
             using (var db = new AppDbContext())
             {
                 for (byte i = 0; i < Iterations; i++)
@@ -29,28 +29,17 @@ namespace Benchmarks
                     var @string = i.ToString();
                     db.EntityB.Add(new EntityB { MyProperty = @string });
                     db.EntityC.Add(new EntityC { MyProperty = @string });
-                }
-                await db.SaveChangesAsync();
-                WriteLine($"Adding {nameof(EntityA)} data");
-                for (byte i = 1; i <= Iterations; i++)
-                    for (byte j = 1; j <= Iterations; j++)
-                        db.EntityA.Add(new EntityA { EntityBId = i, EntityCId = j });
-                await db.SaveChangesAsync();
-            }
-            WriteLine($"Adding {nameof(MemoryOptimizedEntityB)} & {nameof(MemoryOptimizedEntityC)} data");
-            using (var db = new AppDbContext())
-            {
-                for (byte i = 0; i < Iterations; i++)
-                {
-                    var @string = i.ToString();
                     db.MemoryOptimizedEntityB.Add(new MemoryOptimizedEntityB { MyProperty = @string });
                     db.MemoryOptimizedEntityC.Add(new MemoryOptimizedEntityC { MyProperty = @string });
                 }
                 await db.SaveChangesAsync();
-                WriteLine($"Adding {nameof(MemoryOptimizedEntityA)} data");
+                WriteLine($"Adding entity A data");
                 for (byte i = 1; i <= Iterations; i++)
                     for (byte j = 1; j <= Iterations; j++)
+                    {
+                        db.EntityA.Add(new EntityA { EntityBId = i, EntityCId = j });
                         db.MemoryOptimizedEntityA.Add(new MemoryOptimizedEntityA { EntityBId = i, EntityCId = j });
+                    }
                 await db.SaveChangesAsync();
             }
         }
