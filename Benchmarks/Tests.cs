@@ -5,9 +5,10 @@ using BenchmarkDotNet.Attributes.Jobs;
 using BenchmarkDotNet.Running;
 using Benchmarks.Model;
 using Dapper;
-using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using static Benchmarks.Constants;
+using static System.String;
 
 namespace Benchmarks
 {
@@ -20,72 +21,72 @@ namespace Benchmarks
         [Benchmark]
         public async Task<int> DapperDotNet_NewCommandDefinition()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
-                return await connection.ExecuteScalarAsync<int>(new CommandDefinition(Constants.Command, Constants.Entity.ToSqlSaveParameters(), commandType: CommandType.StoredProcedure));
+                return await connection.ExecuteScalarAsync<int>(new CommandDefinition(Command, Entity.ToSqlSaveParameters(), commandType: StoredProcedure));
             }
         }
 
         [Benchmark]
         public async Task<byte[]> DapperDotNet_NewCommandDefinition_AsBytes()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
-                return await connection.ExecuteScalarAsync<byte[]>(new CommandDefinition(Constants.BytesCommand, Constants.Entity.ToSqlSaveParameters(), commandType: CommandType.StoredProcedure));
+                return await connection.ExecuteScalarAsync<byte[]>(new CommandDefinition(BytesCommand, Entity.ToSqlSaveParameters(), commandType: StoredProcedure));
             }
         }
 
         [Benchmark]
         public async Task<int> DapperDotNet_TextCommand()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
-                return await connection.ExecuteScalarAsync<int>(IntTextCommand(in Constants.Entity));
+                return await connection.ExecuteScalarAsync<int>(IntTextCommand(in Entity));
             }
         }
 
         [Benchmark]
         public async Task<byte[]> DapperDotNet_TextCommand_AsBytes()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
-                return await connection.ExecuteScalarAsync<byte[]>(AsBytesTextCommand(in Constants.Entity));
+                return await connection.ExecuteScalarAsync<byte[]>(AsBytesTextCommand(in Entity));
             }
         }
 
         [Benchmark]
         public async Task<int> DapperDotNet_Parameters()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
-                return await connection.ExecuteScalarAsync<int>(Constants.Command, Constants.Entity.ToSqlSaveParameters(), commandType: CommandType.StoredProcedure);
+                return await connection.ExecuteScalarAsync<int>(Command, Entity.ToSqlSaveParameters(), commandType: StoredProcedure);
             }
         }
 
         [Benchmark]
         public async Task<byte[]> DapperDotNet_Parameters_AsBytes()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 await connection.OpenAsync();
-                return await connection.ExecuteScalarAsync<byte[]>(Constants.BytesCommand, Constants.Entity.ToSqlSaveParameters(), commandType: CommandType.StoredProcedure);
+                return await connection.ExecuteScalarAsync<byte[]>(BytesCommand, Entity.ToSqlSaveParameters(), commandType: StoredProcedure);
             }
         }
 
         [Benchmark]
         public async Task<int> AdoSqlCommand_WithParameters()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
-            using (var command = new SqlCommand(Constants.Command, connection) { CommandType = CommandType.StoredProcedure })
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(Command, connection) { CommandType = StoredProcedure })
             {
                 var parameters = command.Parameters;
-                parameters.AddWithValue(nameof(EntityA.EntityBId), Constants.Entity.EntityBId);
-                parameters.AddWithValue(nameof(EntityA.EntityCId), Constants.Entity.EntityCId);
+                parameters.AddWithValue(nameof(EntityA.EntityBId), Entity.EntityBId);
+                parameters.AddWithValue(nameof(EntityA.EntityCId), Entity.EntityCId);
                 await connection.OpenAsync();
                 return (int)(await command.ExecuteScalarAsync());
             }
@@ -94,12 +95,12 @@ namespace Benchmarks
         [Benchmark]
         public async Task<byte[]> AdoSqlCommand_WithParameters_AsBytes()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
-            using (var command = new SqlCommand(Constants.BytesCommand, connection) { CommandType = CommandType.StoredProcedure })
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(BytesCommand, connection) { CommandType = StoredProcedure })
             {
                 var parameters = command.Parameters;
-                parameters.AddWithValue(nameof(EntityA.EntityBId), Constants.Entity.EntityBId);
-                parameters.AddWithValue(nameof(EntityA.EntityCId), Constants.Entity.EntityCId);
+                parameters.AddWithValue(nameof(EntityA.EntityBId), Entity.EntityBId);
+                parameters.AddWithValue(nameof(EntityA.EntityCId), Entity.EntityCId);
                 await connection.OpenAsync();
                 return (await command.ExecuteScalarAsync()) as byte[];
             }
@@ -108,8 +109,8 @@ namespace Benchmarks
         [Benchmark]
         public async Task<int> AdoSqlCommand_Text()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
-            using (var command = new SqlCommand(IntTextCommand(in Constants.Entity), connection))
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(IntTextCommand(in Entity), connection))
             {
                 await connection.OpenAsync();
                 return (int)(await command.ExecuteScalarAsync());
@@ -119,8 +120,8 @@ namespace Benchmarks
         [Benchmark]
         public async Task<byte[]> AdoSqlCommand_Text_AsBytes()
         {
-            using (var connection = new SqlConnection(Constants.ConnectionString))
-            using (var command = new SqlCommand(AsBytesTextCommand(in Constants.Entity), connection))
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(AsBytesTextCommand(in Entity), connection))
             {
                 await connection.OpenAsync();
                 return (await command.ExecuteScalarAsync()) as byte[];
@@ -156,15 +157,15 @@ namespace Benchmarks
         */
 
         private static string AsBytesTextCommand(in EntityA entity)
-            => string.Concat(Constants.ExecBytesCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
+            => Concat(ExecBytesCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
 
         private static string IntTextCommand(in EntityA entity)
-            => string.Concat(Constants.ExecCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
+            => Concat(ExecCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
 
         private static string NativeAsBytesTextCommand(in MemoryOptimizedEntityA entity)
-            => string.Concat(Constants.NativeExecBytesCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
+            => Concat(NativeExecBytesCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
 
         private static string NativeIntTextCommand(in MemoryOptimizedEntityA entity)
-            => string.Concat(Constants.NativeExecCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
+            => Concat(NativeExecCommand, entity.EntityBId.ToString(), ",", entity.EntityCId.ToString());
     }
 }
