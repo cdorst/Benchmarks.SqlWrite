@@ -39,6 +39,46 @@ namespace Benchmarks
         }
 
         [Benchmark]
+        public async Task<int> DapperDotNet_NewCommandDefinition_Text()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                return await connection.ExecuteScalarAsync<int>(new CommandDefinition(IntTextCommand(in Entity), commandType: Text));
+            }
+        }
+
+        [Benchmark]
+        public async Task<byte[]> DapperDotNet_NewCommandDefinition_Text_AsBytes()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                return await connection.ExecuteScalarAsync<byte[]>(new CommandDefinition(AsBytesTextCommand(in Entity), commandType: Text));
+            }
+        }
+
+        [Benchmark]
+        public async Task<int> DapperDotNet_NewCommandDefinition_Text_NativeCompiled()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                return await connection.ExecuteScalarAsync<int>(new CommandDefinition(NativeIntTextCommand(in MemoryOptimizedEntity), commandType: Text));
+            }
+        }
+
+        [Benchmark]
+        public async Task<byte[]> DapperDotNet_NewCommandDefinition_Text_AsBytes_NativeCompiled()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                await connection.OpenAsync();
+                return await connection.ExecuteScalarAsync<byte[]>(new CommandDefinition(NativeAsBytesTextCommand(in MemoryOptimizedEntity), commandType: Text));
+            }
+        }
+
+        [Benchmark]
         public async Task<int> DapperDotNet_TextCommand()
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -122,6 +162,28 @@ namespace Benchmarks
         {
             using (var connection = new SqlConnection(ConnectionString))
             using (var command = new SqlCommand(AsBytesTextCommand(in Entity), connection))
+            {
+                await connection.OpenAsync();
+                return (await command.ExecuteScalarAsync()) as byte[];
+            }
+        }
+
+        [Benchmark]
+        public async Task<int> AdoSqlCommand_Text_NativeCompiled()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(NativeIntTextCommand(in MemoryOptimizedEntity), connection))
+            {
+                await connection.OpenAsync();
+                return (int)(await command.ExecuteScalarAsync());
+            }
+        }
+
+        [Benchmark]
+        public async Task<byte[]> AdoSqlCommand_Text_AsBytes_NativeCompiled()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            using (var command = new SqlCommand(NativeAsBytesTextCommand(in MemoryOptimizedEntity), connection))
             {
                 await connection.OpenAsync();
                 return (await command.ExecuteScalarAsync()) as byte[];
