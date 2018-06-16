@@ -18,7 +18,9 @@ namespace Benchmarks
         public const string DatabaseHostName = "localhost";
 
         public static readonly EntityA Entity = new EntityA { EntityBId = 5, EntityCId = 5 };
+        public static readonly MemoryOptimizedEntityA MemoryOptimizedEntity = new MemoryOptimizedEntityA { EntityBId = 5, EntityCId = 5 };
         public static readonly CommandType StoredProcedure = CommandType.StoredProcedure;
+        public static readonly CommandType Text = CommandType.Text;
 
         public static readonly string ConnectionString = string.Concat("Persist Security Info=False;Packet Size=512;Server=", DatabaseHostName,
             ";User ID=", DatabaseUserName,
