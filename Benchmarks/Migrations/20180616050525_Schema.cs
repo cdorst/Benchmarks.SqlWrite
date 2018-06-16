@@ -135,17 +135,9 @@ namespace Benchmarks.Migrations
                 column: "EntityCId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MemoryOptimizedEntityA_EntityBId",
-                table: "MemoryOptimizedEntityA",
-                column: "EntityBId",
-                unique: true)
-                .Annotation("SqlServer:Clustered", false);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_MemoryOptimizedEntityA_EntityCId",
                 table: "MemoryOptimizedEntityA",
-                column: "EntityCId",
-                unique: true)
+                column: "EntityCId")
                 .Annotation("SqlServer:Clustered", false);
         }
 

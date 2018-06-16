@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Benchmarks.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20180615074537_Schema")]
+    [Migration("20180616050525_Schema")]
     partial class Schema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,12 +87,7 @@ namespace Benchmarks.Migrations
                     b.HasAlternateKey("EntityBId", "EntityCId")
                         .HasAnnotation("SqlServer:Clustered", false);
 
-                    b.HasIndex("EntityBId")
-                        .IsUnique()
-                        .HasAnnotation("SqlServer:Clustered", false);
-
                     b.HasIndex("EntityCId")
-                        .IsUnique()
                         .HasAnnotation("SqlServer:Clustered", false);
 
                     b.ToTable("MemoryOptimizedEntityA");
@@ -156,13 +151,13 @@ namespace Benchmarks.Migrations
             modelBuilder.Entity("Benchmarks.Model.MemoryOptimizedEntityA", b =>
                 {
                     b.HasOne("Benchmarks.Model.MemoryOptimizedEntityB", "EntityB")
-                        .WithOne()
-                        .HasForeignKey("Benchmarks.Model.MemoryOptimizedEntityA", "EntityBId")
+                        .WithMany()
+                        .HasForeignKey("EntityBId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Benchmarks.Model.MemoryOptimizedEntityC", "EntityC")
-                        .WithOne()
-                        .HasForeignKey("Benchmarks.Model.MemoryOptimizedEntityA", "EntityCId")
+                        .WithMany()
+                        .HasForeignKey("EntityCId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618

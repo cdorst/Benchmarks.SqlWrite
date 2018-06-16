@@ -31,9 +31,9 @@ namespace Benchmarks
                     nameof(Benchmarks.Model.MemoryOptimizedEntityA.EntityBId),
                     nameof(Benchmarks.Model.MemoryOptimizedEntityA.EntityCId));
             modelBuilder.Entity<MemoryOptimizedEntityA>()
-                .HasOne<MemoryOptimizedEntityB>(nameof(Benchmarks.Model.MemoryOptimizedEntityA.EntityB)).WithOne().OnDelete(DeleteBehavior.Restrict);
+                .HasOne<MemoryOptimizedEntityB>(nameof(Benchmarks.Model.MemoryOptimizedEntityA.EntityB)).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<MemoryOptimizedEntityA>()
-                .HasOne<MemoryOptimizedEntityC>(nameof(Benchmarks.Model.MemoryOptimizedEntityA.EntityC)).WithOne().OnDelete(DeleteBehavior.Restrict);
+                .HasOne<MemoryOptimizedEntityC>(nameof(Benchmarks.Model.MemoryOptimizedEntityA.EntityC)).WithMany().OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<MemoryOptimizedEntityB>()
                 .ForSqlServerIsMemoryOptimized()
                 .HasAlternateKey(nameof(Benchmarks.Model.MemoryOptimizedEntityB.MyProperty));
