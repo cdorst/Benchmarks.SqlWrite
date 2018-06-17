@@ -17,24 +17,30 @@ BenchmarkDotNet=v0.10.14, OS=Windows 10.0.17134
 Intel Core i5-3570K CPU 3.40GHz (Ivy Bridge), 1 CPU, 4 logical and 4 physical cores
 .NET Core SDK=2.1.300
   [Host]     : .NET Core 2.1.0 (CoreCLR 4.6.26515.07, CoreFX 4.6.26515.06), 64bit RyuJIT
-  Job-WWENVU : .NET Core 2.1.0 (CoreCLR 4.6.26515.07, CoreFX 4.6.26515.06), 64bit RyuJIT
+  Job-YGYCBR : .NET Core 2.1.0 (CoreCLR 4.6.26515.07, CoreFX 4.6.26515.06), 64bit RyuJIT
 </code></pre>
 <pre><code>LaunchCount=20  
 </code></pre>
 
 <table>
-<thead><tr><th>                             Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Median</th><th>Rank</th><th>Allocated</th>
+<thead><tr><th>                                                 Method</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Median</th><th>Rank</th><th>Gen 0</th><th>Allocated</th>
 </tr>
-</thead><tbody><tr><td>DapperDotNet_NewCommandDefinition</td><td>6.250 ms</td><td>0.0659 ms</td><td>0.8763 ms</td><td>6.142 ms</td><td>1</td><td>4.98 KB</td>
-</tr><tr><td>DapperDotNet_NewCommandDefinition_AsBytes</td><td>7.077 ms</td><td>0.0473 ms</td><td>0.6333 ms</td><td>7.032 ms</td><td>3</td><td>4.98 KB</td>
-</tr><tr><td>DapperDotNet_TextCommand</td><td>7.229 ms</td><td>0.0410 ms</td><td>0.5470 ms</td><td>7.201 ms</td><td>5</td><td>3.47 KB</td>
-</tr><tr><td>DapperDotNet_TextCommand_AsBytes</td><td>7.177 ms</td><td>0.0456 ms</td><td>0.6113 ms</td><td>7.154 ms</td><td>4</td><td>3.47 KB</td>
-</tr><tr><td>DapperDotNet_Parameters</td><td>7.072 ms</td><td>0.0497 ms</td><td>0.6592 ms</td><td>7.027 ms</td><td>3</td><td>4.98 KB</td>
-</tr><tr><td>DapperDotNet_Parameters_AsBytes</td><td>6.994 ms</td><td>0.0421 ms</td><td>0.5614 ms</td><td>6.964 ms</td><td>2</td><td>4.98 KB</td>
-</tr><tr><td>AdoSqlCommand_WithParameters</td><td>6.986 ms</td><td>0.0428 ms</td><td>0.5702 ms</td><td>6.951 ms</td><td>2</td><td>4.03 KB</td>
-</tr><tr><td>AdoSqlCommand_WithParameters_AsBytes</td><td>6.973 ms</td><td>0.0394 ms</td><td>0.5286 ms</td><td>6.950 ms</td><td>2</td><td>4.03 KB</td>
-</tr><tr><td>AdoSqlCommand_Text</td><td>7.436 ms</td><td>0.0506 ms</td><td>0.6792 ms</td><td>7.420 ms</td><td>6</td><td>3.27 KB</td>
-</tr><tr><td>AdoSqlCommand_Text_AsBytes</td><td>7.224 ms</td><td>0.0455 ms</td><td>0.6077 ms</td><td>7.188 ms</td><td>5</td><td>3.27 KB</td>
+</thead><tbody><tr><td>DapperDotNet_NewCommandDefinition</td><td>7,404.3 us</td><td>88.0941 us</td><td>1,190.705 us</td><td>7,368.9 us</td><td>4</td><td>-</td><td>5.04 KB</td>
+</tr><tr><td>DapperDotNet_NewCommandDefinition_AsBytes</td><td>8,212.6 us</td><td>70.2271 us</td><td>935.677 us</td><td>8,161.1 us</td><td>9</td><td>-</td><td>5.04 KB</td>
+</tr><tr><td>DapperDotNet_NewCommandDefinition_Text</td><td>8,295.0 us</td><td>68.1457 us</td><td>916.409 us</td><td>8,252.8 us</td><td>9</td><td>-</td><td>3.47 KB</td>
+</tr><tr><td>DapperDotNet_NewCommandDefinition_Text_AsBytes</td><td>8,113.4 us</td><td>72.9239 us</td><td>979.161 us</td><td>8,109.3 us</td><td>8</td><td>-</td><td>3.47 KB</td>
+</tr><tr><td>DapperDotNet_NewCommandDefinition_Text_NativeCompiled</td><td>537.7 us</td><td>0.7513 us</td><td>3.725 us</td><td>537.3 us</td><td>2</td><td>0.9766</td><td>3.47 KB</td>
+</tr><tr><td>DapperDotNet_NewCommandDefinition_Text_AsBytes_NativeCompiled</td><td>541.9 us</td><td>0.8310 us</td><td>4.212 us</td><td>541.3 us</td><td>3</td><td>0.9766</td><td>3.47 KB</td>
+</tr><tr><td>DapperDotNet_TextCommand</td><td>7,395.4 us</td><td>84.6554 us</td><td>1,146.827 us</td><td>7,430.5 us</td><td>4</td><td>-</td><td>3.47 KB</td>
+</tr><tr><td>DapperDotNet_TextCommand_AsBytes</td><td>8,256.3 us</td><td>71.2147 us</td><td>961.584 us</td><td>8,232.4 us</td><td>9</td><td>-</td><td>3.47 KB</td>
+</tr><tr><td>DapperDotNet_Parameters</td><td>8,022.8 us</td><td>58.4209 us</td><td>788.035 us</td><td>7,995.6 us</td><td>7</td><td>-</td><td>5.04 KB</td>
+</tr><tr><td>DapperDotNet_Parameters_AsBytes</td><td>7,777.9 us</td><td>79.6400 us</td><td>1,074.803 us</td><td>7,793.6 us</td><td>6</td><td>-</td><td>5.04 KB</td>
+</tr><tr><td>AdoSqlCommand_WithParameters</td><td>7,526.4 us</td><td>73.3206 us</td><td>983.478 us</td><td>7,532.6 us</td><td>5</td><td>-</td><td>4.03 KB</td>
+</tr><tr><td>AdoSqlCommand_WithParameters_AsBytes</td><td>7,989.3 us</td><td>62.7117 us</td><td>843.764 us</td><td>7,950.9 us</td><td>7</td><td>-</td><td>4.03 KB</td>
+</tr><tr><td>AdoSqlCommand_Text</td><td>8,231.1 us</td><td>107.2667 us</td><td>1,453.874 us</td><td>8,109.7 us</td><td>9</td><td>-</td><td>3.27 KB</td>
+</tr><tr><td>AdoSqlCommand_Text_AsBytes</td><td>8,200.4 us</td><td>81.6946 us</td><td>1,106.438 us</td><td>8,239.0 us</td><td>9</td><td>-</td><td>3.27 KB</td>
+</tr><tr><td>AdoSqlCommand_Text_NativeCompiled</td><td>534.7 us</td><td>0.7943 us</td><td>4.033 us</td><td>534.7 us</td><td>1</td><td>0.9766</td><td>3.27 KB</td>
+</tr><tr><td>AdoSqlCommand_Text_AsBytes_NativeCompiled</td><td>535.5 us</td><td>1.0416 us</td><td>5.345 us</td><td>534.7 us</td><td>1</td><td>0.9766</td><td>3.27 KB</td>
 </tr></tbody></table>
 </body>
 </html>
